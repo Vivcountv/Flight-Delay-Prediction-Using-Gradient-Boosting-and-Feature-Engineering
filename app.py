@@ -5,7 +5,7 @@ import joblib
 import lightgbm as lgb
 import datetime
 import json
-from lucide_react import Plane, Clock, AlertTriangle, Table
+# from lucide_react import Plane, Clock, AlertTriangle, Table  <- DIHAPUS, KARENA INI REACT
 
 # --- (BARU) URL Gambar Latar ---
 BACKGROUND_IMAGE_URL = "https://images.unsplash.com/photo-1569154941061-623bc2b11c34?auto=format&fit=crop&w=1920&q=80"
@@ -29,7 +29,8 @@ st.markdown(
     div[data-testid="stAppViewContainer"] > .main > div:first-child {{
         padding-top: 3rem;
     }}
-    div[data-testid="stVerticalBlock"] {{
+    /* (DIPERBARUI) Target yang lebih spesifik untuk kartu konten */
+    section[data-testid="st.main"] > div:first-child > div:first-child > div:first-child {{
         background-color: rgba(255, 255, 255, 0.95); /* Kartu putih semi-transparan */
         border-radius: 10px;
         padding: 2rem;
@@ -96,7 +97,7 @@ def FeatureTable(data):
         'dest_prcp': 'Curah Hujan (Tujuan mm)', 'dest_wspd': 'Kecepatan Angin (Tujuan km/jam)'
     }
     
-    # Filter data yang relevan
+    # Filter data yang relevan (menyembunyikan data cuaca yang lebih teknis)
     relevant_data = {
         featureNameMap.get(key, key): val 
         for key, val in data.items() 
@@ -119,12 +120,14 @@ if model is not None:
         with col1:
             flight_date_input = st.date_input("Tanggal Penerbangan", datetime.date(2023, 1, 15))
             time_input = st.time_input("Jam Keberangkatan Terjadwal", datetime.time(9, 30))
-            airline_input = st.selectbox("Maskapai (Airline)", airline_options, index=airline_options.index('Endeavor Air'))
+            # (DIPERBARUI) Menggunakan opsi yang dimuat dari JSON
+            airline_input = st.selectbox("Maskapai (Airline)", airline_options, index=airline_options.index('Endeavor Air') if 'Endeavor Air' in airline_options else 0)
             dep_delay_input = st.number_input("Keterlambatan Berangkat (Menit)", min_value=-60, max_value=600, value=0, help="Masukkan 0 jika tepat waktu, atau angka negatif jika berangkat lebih awal.")
 
         with col2:
-            dep_airport_input = st.selectbox("Bandara Keberangkatan (Origin)", airport_options, index=airport_options.index('ATL'))
-            arr_airport_input = st.selectbox("Bandara Kedatangan (Destination)", airport_options, index=airport_options.index('CVG'))
+            # (DIPERBARUI) Menggunakan opsi yang dimuat dari JSON
+            dep_airport_input = st.selectbox("Bandara Keberangkatan (Origin)", airport_options, index=airport_options.index('ATL') if 'ATL' in airport_options else 0)
+            arr_airport_input = st.selectbox("Bandara Kedatangan (Destination)", airport_options, index=airport_options.index('CVG') if 'CVG' in airport_options else 0)
             duration_input = st.number_input("Durasi Penerbangan (Menit)", min_value=30, max_value=600, value=120)
         
         st.subheader("Info Tambahan (Opsional, namun sangat mempengaruhi prediksi):")
@@ -207,23 +210,26 @@ if model is not None:
                 st.subheader("Hasil Prediksi:")
                 
                 if is_near_holiday_flag == 1:
-                    st.warning("⚠️ Catatan: Prediksi ini memperhitungkan kepadatan hari libur.", icon="⚠️")
+                    st.warning("⚠️ Catatan: Prediksi ini memperhitungkan kepadatan hari libur.", icon="⚠️") # Emoji Icon
 
                 res_col1, res_col2 = st.columns(2)
                 if prediction == 1:
                     with res_col1:
-                        st.error(f"**Penerbangan Diprediksi TERLAMBAT**\n\nProbabilitas Keterlambatan: **{(probability * 100):.0f}%**", icon="✈️")
+                        # (DIPERBARUI) Menggunakan emoji, bukan komponen Lucide
+                        st.error(f"**Penerbangan Diprediksi TERLAMBAT**\n\nProbabilitas Keterlambatan: **{(probability * 100):.0f}%**", icon="⚠️")
                 else:
                     with res_col1:
+                        # (DIPERBARUI) Menggunakan emoji, bukan komponen Lucide
                         st.success(f"**Penerbangan Diprediksi TEPAT WAKTU**\n\nProbabilitas Tepat Waktu: **{(100 - (probability * 100)):.0f}%**", icon="✈️")
                 
                 with res_col2:
+                    # (DIPERBARUI) Menggunakan emoji, bukan komponen Lucide
                     st.info(f"**Estimasi Waktu Kedatangan (ETA)**\n\n**{eta_display}**", icon="🕒")
                     if prediction == 1:
-                        st.warning("ETA ini mungkin meleset karena adanya prediksi *tambahan* delay (cuaca/lalu lintas).", icon="⚠️")
+                        st.warning("ETA ini mungkin meleset karena adanya prediksi *tambahan* delay.", icon="⚠️")
                 
                 # Tampilkan tabel rincian (selalu ditampilkan)
-                with st.expander("Lihat Rincian Data Prediksi"):
+                with st.expander("Tampilkan Rincian Data Prediksi", expanded=True): # 'expanded=True' agar terbuka otomatis
                     FeatureTable(input_data)
 else:
     st.error("Gagal memuat aset model. Silakan periksa file di repository dan coba lagi.")
