@@ -5,15 +5,11 @@ import joblib
 import lightgbm as lgb
 import datetime
 import json
-# from lucide_react import Plane, Clock, AlertTriangle, Table  <- DIHAPUS, KARENA INI REACT
 
-# --- (BARU) URL Gambar Latar ---
 BACKGROUND_IMAGE_URL = "https://images.unsplash.com/photo-1569154941061-623bc2b11c34?auto=format&fit=crop&w=1920&q=80"
 
-# --- 1. Konfigurasi Halaman ---
 st.set_page_config(page_title="Prediksi Keterlambatan Penerbangan", layout="wide")
 
-# --- (BARU) Terapkan CSS untuk Background ---
 st.markdown(
     f"""
     <style>
@@ -215,15 +211,12 @@ if model is not None:
                 res_col1, res_col2 = st.columns(2)
                 if prediction == 1:
                     with res_col1:
-                        # (DIPERBARUI) Menggunakan emoji, bukan komponen Lucide
                         st.error(f"**Penerbangan Diprediksi TERLAMBAT**\n\nProbabilitas Keterlambatan: **{(probability * 100):.0f}%**", icon="⚠️")
                 else:
                     with res_col1:
-                        # (DIPERBARUI) Menggunakan emoji, bukan komponen Lucide
                         st.success(f"**Penerbangan Diprediksi TEPAT WAKTU**\n\nProbabilitas Tepat Waktu: **{(100 - (probability * 100)):.0f}%**", icon="✈️")
                 
                 with res_col2:
-                    # (DIPERBARUI) Menggunakan emoji, bukan komponen Lucide
                     st.info(f"**Estimasi Waktu Kedatangan (ETA)**\n\n**{eta_display}**", icon="🕒")
                     if prediction == 1:
                         st.warning("ETA ini mungkin meleset karena adanya prediksi *tambahan* delay.", icon="⚠️")
