@@ -4,4 +4,3 @@ numpy
 joblib
 lightgbm
 scikit-learn
-lucide-react
