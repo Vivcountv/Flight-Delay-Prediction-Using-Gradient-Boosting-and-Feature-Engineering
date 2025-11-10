@@ -8,7 +8,7 @@ Aplikasi ini dibangun dan di-deploy sepenuhnya menggunakan **Streamlit** dan Pyt
 
 ## 🚀 Demo Aplikasi Web
 
-**Link Deployment Live:** `[MASUKKAN LINK STREAMLIT.APP ANDA DI SINI]`
+**Link Deployment Live:** `https://usflightdelayprediction.streamlit.app/`
 
 Aplikasi ini memungkinkan pengguna memasukkan detail penerbangan dan menerima prediksi instan serta estimasi waktu kedatangan (ETA).
 
@@ -22,14 +22,14 @@ Aplikasi ini memungkinkan pengguna memasukkan detail penerbangan dan menerima pr
 
 Model dievaluasi pada **202.163 data uji** dan mencapai hasil yang sangat kuat, membuktikan bahwa model ini **stabil dan tidak overfitting**.
 
-* **Skor AUC:** **0.9988** (vs 0.9988 pada data validasi)
+* **Skor AUC:** **99.88%** (vs 0.9988 pada data validasi)
 * **Akurasi:** **98.48%**
 * **Recall (Kelas Terlambat):** **97%** (Model berhasil mengidentifikasi 97% dari semua penerbangan yang *sebenarnya* akan terlambat).
 * **Precision (Kelas Terlambat):** **95%** (Saat model memprediksi "Terlambat", 95% prediksinya benar).
 
 ### Fitur Paling Penting
 
-Analisis *Feature Importance* (**Langkah 18**) menunjukkan bahwa fitur status (`Delay_LastAircraft`, `Dep_Delay`, `Delay_NAS`) adalah prediktor terkuat, diikuti oleh fitur cuaca (`origin_wspd`) dan kalender (`Is_Near_Holiday`).
+Analisis *Feature Importance*  menunjukkan bahwa fitur status (`Delay_LastAircraft`, `Dep_Delay`, `Delay_NAS`) adalah prediktor terkuat, diikuti oleh fitur cuaca (`origin_wspd`) dan kalender (`Is_Near_Holiday`).
 
 <img src="https://raw.githubusercontent.com/Vivcountv/Flight-Delay-Prediction-Using-Gradient-Boosting-and-Feature-Engineering/main/image_86b920.png" alt="Grafik Feature Importance" width="600">
 
